@@ -10,4 +10,4 @@ This is a Python application that utilizes the Financial Modeling Prep API. It s
 3. Make sure you have these modules imported: requests, ssl, smtplib, time, plyer, email.message
 
 ## Example
-![Ex 1](../examples/ex1.png)
+![Ex 1](/examples/ex1.png)
