@@ -24,8 +24,8 @@ PASSWORD = ""
 EMAIL_PASS = ""
 
 # Variables (change these based on what you are looking for and how you want to send your emails)
-TARGET = 20500
-TICKER = "BTCUSD"
+TARGET = 0
+TICKER = ""
 EMAIL_SENDER = ""  # make sure this is a gmail account
 EMAIL_RECEIVER = ""
 
@@ -64,8 +64,8 @@ def check():
     print(f"Current {name} Price: ${current_price}  Time: {converted_time}")
 
     if current_price < TARGET:
-        noti.notify(title="Message from PC",
-                    message="Hello World!",
+        noti.notify(title="Stock Market Price Indicator",
+                    message=f"{name} has crossed desired target price!",
                     timeout=10)
         send_email(name, current_price)
 
