@@ -26,8 +26,8 @@ EMAIL_PASS = ""
 # Variables (change these based on what you are looking for and how you want to send your emails)
 TARGET = 20500
 TICKER = "BTCUSD"
-EMAIL_SENDER = "aryantestingemail@gmail.com"
-EMAIL_RECEIVER = "aryansat@hotmail.com"
+EMAIL_SENDER = ""  # make sure this is a gmail account
+EMAIL_RECEIVER = ""
 
 
 def send_email(name, current_price):
