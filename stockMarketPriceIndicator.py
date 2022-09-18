@@ -1,9 +1,5 @@
 '''
-Here I have created a stock market application that sends the user an email and a system notification when a specified stock
-or cryptocurrency has crossed below a specified target. I have utilized the Financial Modeling Prep API to make this possible.
-
-Follow this video to send emails using Python: https://www.youtube.com/watch?v=g_j6ILT-X0k
-(other methods are currently not working so watch the above link^)
+TESTING FOR SMS, EMAIL, SYS NOTI. working all together
 '''
 
 # imports
@@ -14,6 +10,11 @@ import smtplib
 import time
 from plyer import notification as noti  # module for system notifications
 
+# modules for SMS service
+import os
+from twilio.rest import Client
+
+
 # API Key from the website
 API_KEY = ""
 
@@ -23,11 +24,25 @@ PASSWORD = ""
 # password of the email address you are sending emails from
 EMAIL_PASS = ""
 
+# Twilio SMS requirements
+account_sid = ""
+auth_token = ""
+
 # Variables (change these based on what you are looking for and how you want to send your emails)
 TARGET = 0
 TICKER = ""
 EMAIL_SENDER = ""  # make sure this is a gmail account
 EMAIL_RECEIVER = ""
+
+
+# send a SMS
+def send_sms(name, current_price):
+    client = Client(account_sid, auth_token)
+    client.messages.create(
+        body=f"\n\n{name} has crossed ${TARGET} \n\nCurrent Price: ${current_price}",
+        from_='+19785156670',
+        to=os.environ.get('MY_NUMBER')
+    )
 
 
 def send_email(name, current_price):
@@ -53,9 +68,15 @@ def time_converter(timeInput):
     return time.strftime('%H:%M', time.localtime(timeInput))
 
 
-def check():
+def check(valid):
     info = requests.get(
         f"https://financialmodelingprep.com/api/v3/quote/{TICKER}?apikey={API_KEY}").json()
+
+    # if ticker name is not valid
+    if info == []:
+        valid = False
+        print("Ticker and/or API key is not valid!")
+        return valid
 
     name = info[0]['name']
     current_price = info[0]['price']
@@ -68,9 +89,13 @@ def check():
                     message=f"{name} has crossed desired target price!",
                     timeout=10)
         send_email(name, current_price)
+        send_sms(name, current_price)
+    return valid
 
 
-while(True):
-    check()
+valid = True
+while(valid):
     # With free plan on Financial Modeling Prep website, can send a request call once every 6 minutes (250 calls/day)
+    if not check(valid):
+        break
     time.sleep(360)
